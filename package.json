@@ -1,0 +1,25 @@
+{
+  "name": "frances-eoi-2025-m",
+  "version": "1.0.0",
+  "description": "Sitio estático para el grupo de francés EOI Valladolid 2025",
+  "main": "index.js",
+  "scripts": {
+    "dev": "browser-sync start --server . --watch --no-ui",
+    "deploy": "gh-pages -d ."
+  },
+  "keywords": [
+    "frances",
+    "eoi",
+    "a1",
+    "curso"
+  ],
+  "author": "Cleydyr de Albuquerque",
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^1.13.2",
+    "browser-sync": "^3.0.4",
+    "gh-pages": "^6.3.0",
+    "puppeteer": "^24.31.0"
+  },
+  "type": "module"
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Francés EOI 2025 - Avisos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <app-header active="avisos"></app-header>
+  <main class="main-content" data-notice-source="data/avisos.json">
+    <header class="page-header">
+      <h1>Avisos rápidos</h1>
+      <p>
+        Usa este espacio para compartir información importante: cambios de
+        horario, recordatorios, enlaces y más.
+      </p>
+    </header>
+
+    <section class="notice-section" aria-labelledby="notice-current-title">
+      <h2 id="notice-current-title">Avisos activos</h2>
+      <div class="notice-list" id="notice-current" data-empty="No hay avisos activos por ahora."></div>
+    </section>
+
+    <section class="notice-section" aria-labelledby="notice-expired-title">
+      <h2 id="notice-expired-title">Avisos caducados</h2>
+      <div class="notice-list" id="notice-expired" data-empty="Todavía no hay avisos caducados."></div>
+    </section>
+
+    <template id="notice-template">
+      <article class="notice-card">
+        <h2 class="notice-title">Título del aviso</h2>
+        <p class="notice-body">Texto del aviso.</p>
+        <p class="notice-expiration">
+          Vigente hasta <time datetime="">fecha</time>
+        </p>
+      </article>
+    </template>
+  </main>
+  <app-footer></app-footer>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

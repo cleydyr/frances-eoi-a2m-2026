@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Francés EOI 2025 - Calendario</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+  <app-header active="calendario"></app-header>
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Calendario</h1>
+      <p>
+        Aquí puedes ver el calendario de nuestras clases y eventos. Cambia la
+        vista a semana o mes según prefieras.
+      </p>
+    </header>
+    <section class="calendar-frame">
+      <iframe title="Calendario de la clase"
+        src="https://calendar.google.com/calendar/embed?src=e053b9731d29d1c9c2569a4735c12681039bc334b34f6e7b7db501eda05ebc9b%40group.calendar.google.com&ctz=Europe%2FMadrid"
+        loading="lazy" referrerpolicy="no-referrer"></iframe>
+    </section>
+  </main>
+  <app-footer></app-footer>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
