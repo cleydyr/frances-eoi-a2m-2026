@@ -114,8 +114,8 @@ class AppFooter extends HTMLElement {
 customElements.define("app-footer", AppFooter);
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupSummaryInteractions();
   loadNoticesFromJSON();
+  loadClassesFromJSON();
   loadCurso();
 });
 
@@ -226,51 +226,340 @@ function renderFilesFolder(curso) {
   mount.append(section);
 }
 
-function setupSummaryInteractions() {
-  const summaryButton = document.querySelector('[data-action="add-summary"]');
-  const summaryList = document.getElementById("summary-list");
-  const summaryTemplate = document.getElementById("summary-template");
-
-  if (!summaryButton || !summaryList || !summaryTemplate) {
+async function loadClassesFromJSON() {
+  const mount = document.getElementById("clases");
+  if (!mount) {
     return;
   }
 
-  summaryButton.addEventListener("click", () => {
-    const title = prompt("Título del resumen (ej. Clase 3 · 29 enero):");
-    if (!title) {
-      return;
+  try {
+    const response = await fetch("/data/clases.json", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
     }
 
-    const pointsInput = prompt(
-      "Escribe los puntos clave separados por comas (ej. Saludos, Números, Tarea)."
-    );
+    const payload = await response.json();
+    const notes = normalizeClasses(payload);
+    const files = await loadClassFiles(notes);
+    renderClasses(mount, notes, files);
+  } catch (error) {
+    console.error("[Clases] No se pudieron cargar las clases", error);
+    mount.replaceChildren(createEmptyState("No se pudieron cargar las clases."));
+  }
+}
 
-    const clone = summaryTemplate.content.cloneNode(true);
-    const card = clone.querySelector(".summary-card");
-    const heading = card.querySelector("h2");
-    const list = card.querySelector("ul");
+function normalizeClasses(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
 
-    heading.textContent = title.trim();
-    list.innerHTML = "";
+  const byDate = new Map();
 
-    if (pointsInput) {
-      pointsInput.split(",").forEach((point) => {
-        const text = point.trim();
-        if (!text) {
-          return;
-        }
-        const item = document.createElement("li");
-        item.textContent = text;
-        list.appendChild(item);
-      });
-    } else {
-      const item = document.createElement("li");
-      item.textContent = "Escribe aquí el punto importante.";
-      list.appendChild(item);
+  items.forEach((item) => {
+    const note = normalizeClass(item);
+    if (note) {
+      byDate.set(note.isoDate, note);
     }
-
-    summaryList.prepend(card);
   });
+
+  return [...byDate.values()].sort((a, b) => b.date - a.date);
+}
+
+function normalizeClass(input) {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const parsedDate = parseIsoDate(input.date);
+  const did = stringList(input.did);
+
+  if (!parsedDate || !did.length) {
+    return null;
+  }
+
+  const title = typeof input.title === "string" ? input.title.trim() : "";
+
+  return {
+    isoDate: parsedDate.iso,
+    date: parsedDate.date,
+    number: positiveInteger(input.number),
+    title,
+    did,
+    homework: stringList(input.homework),
+    vocab: stringList(input.vocab),
+    files: uniqueStrings(stringList(input.files)),
+  };
+}
+
+function parseIsoDate(value) {
+  if (typeof value !== "string") {
+    return null;
+  }
+
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+  if (!match) {
+    return null;
+  }
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  const date = new Date(year, month - 1, day);
+
+  if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+    return null;
+  }
+
+  return { iso: match[0], date };
+}
+
+function stringList(value) {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .filter((item) => typeof item === "string")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function uniqueStrings(items) {
+  const seen = new Set();
+  return items.filter((item) => {
+    if (seen.has(item)) {
+      return false;
+    }
+    seen.add(item);
+    return true;
+  });
+}
+
+function positiveInteger(value) {
+  if (typeof value !== "number" || !Number.isInteger(value) || value < 1) {
+    return null;
+  }
+
+  return value;
+}
+
+function classHeading(note) {
+  const parts = [];
+
+  if (note.number) {
+    parts.push(`Clase ${note.number}`);
+  }
+
+  parts.push(formatNoticeDate(note.date));
+
+  if (note.title) {
+    parts.push(note.title);
+  }
+
+  return parts.join(" · ");
+}
+
+async function loadClassFiles(notes) {
+  if (!notes.some((note) => note.files.length)) {
+    return new Map();
+  }
+
+  try {
+    const response = await fetch("/data/archivos.json", { cache: "no-store" });
+    if (!response.ok) {
+      return new Map();
+    }
+
+    const payload = await response.json();
+    return indexFiles(payload);
+  } catch (error) {
+    console.error("[Clases] No se pudieron cargar los archivos", error);
+    return new Map();
+  }
+}
+
+function indexFiles(items) {
+  const files = new Map();
+
+  if (!Array.isArray(items)) {
+    return files;
+  }
+
+  items.forEach((item) => {
+    const file = normalizeLinkedFile(item);
+    if (file) {
+      files.set(file.id, file);
+    }
+  });
+
+  return files;
+}
+
+function normalizeLinkedFile(input) {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const id = typeof input.id === "string" ? input.id.trim() : "";
+  const title = typeof input.title === "string" ? input.title.trim() : "";
+  const href = typeof input.href === "string" ? input.href.trim() : "";
+
+  if (!id || !title || !href || !parseIsoDate(input.date)) {
+    return null;
+  }
+
+  return { id, title, href };
+}
+
+function renderClasses(mount, notes, files) {
+  mount.replaceChildren();
+
+  if (!notes.length) {
+    mount.append(createEmptyState("Todavía no hay notas de clase."));
+    return;
+  }
+
+  const search = document.createElement("form");
+  search.className = "class-search";
+  search.setAttribute("role", "search");
+  search.addEventListener("submit", (event) => {
+    event.preventDefault();
+  });
+
+  const label = document.createElement("label");
+  label.htmlFor = "class-search";
+  label.textContent = "Buscar en las clases";
+
+  const input = document.createElement("input");
+  input.id = "class-search";
+  input.type = "search";
+  input.setAttribute("aria-controls", "class-list");
+
+  const list = document.createElement("div");
+  list.id = "class-list";
+  list.className = "summaries";
+
+  const cards = notes.map((note) => createClassCard(note, files));
+  cards.forEach((card) => list.append(card));
+
+  const noMatch = createEmptyState("Ninguna clase coincide con la búsqueda.");
+  noMatch.hidden = true;
+
+  search.append(label, input);
+  mount.append(search, list, noMatch);
+
+  input.addEventListener("input", () => {
+    const query = foldSearch(input.value.trim());
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const match = !query || card.dataset.search.includes(query);
+      card.hidden = !match;
+      if (match) {
+        visible += 1;
+      }
+    });
+
+    noMatch.hidden = visible !== 0;
+  });
+
+  openHashedClass();
+}
+
+function createClassCard(note, files) {
+  const article = document.createElement("article");
+  article.className = "summary-card";
+  article.id = note.isoDate;
+  article.dataset.search = foldSearch(
+    [note.title, ...note.did, ...note.homework, ...note.vocab].join("\n")
+  );
+
+  const heading = document.createElement("h2");
+  heading.className = "class-heading";
+
+  const link = document.createElement("a");
+  link.href = `#${note.isoDate}`;
+  link.textContent = classHeading(note);
+  heading.append(link);
+
+  article.append(heading, createItemList(note.did));
+
+  if (note.homework.length) {
+    article.append(createLabeledList("Deberes", note.homework));
+  }
+
+  if (note.vocab.length) {
+    article.append(createLabeledList("Vocabulario", note.vocab));
+  }
+
+  const linked = note.files.map((id) => files.get(id)).filter(Boolean);
+  if (linked.length) {
+    article.append(createFileList(linked));
+  }
+
+  return article;
+}
+
+function createLabeledList(label, items) {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  heading.textContent = label;
+  section.append(heading, createItemList(items));
+  return section;
+}
+
+function createItemList(items) {
+  const list = document.createElement("ul");
+
+  items.forEach((text) => {
+    const item = document.createElement("li");
+    item.textContent = text;
+    list.append(item);
+  });
+
+  return list;
+}
+
+function createFileList(files) {
+  const list = document.createElement("ul");
+  list.className = "class-files";
+
+  files.forEach((file) => {
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = file.href;
+    link.textContent = file.title;
+
+    if (/^https?:\/\//i.test(file.href)) {
+      link.target = "_blank";
+      link.rel = "noopener";
+    }
+
+    item.append(link);
+    list.append(item);
+  });
+
+  return list;
+}
+
+function foldSearch(value) {
+  return value.toLocaleLowerCase("es").normalize("NFD").replace(/\p{M}/gu, "");
+}
+
+function openHashedClass() {
+  const hash = window.location.hash;
+  if (hash.length < 2) {
+    return;
+  }
+
+  let id = hash.slice(1);
+  try {
+    id = decodeURIComponent(id);
+  } catch (_error) {
+    return;
+  }
+
+  document.getElementById(id)?.scrollIntoView();
 }
 
 async function loadNoticesFromJSON() {
