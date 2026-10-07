@@ -72,7 +72,8 @@ async function loadSchemas() {
   const names = (await readdir(schemaDir)).filter((name) => name.endsWith(".schema.json"));
   for (const name of names) {
     const schema = JSON.parse(await readFile(path.join(schemaDir, name), "utf8"));
-    ajv.addSchema(schema);
+    // The id lives here so schema files can omit $id and the editor can resolve $ref beside the file.
+    ajv.addSchema(schema, `${schemaIdBase}/${name}`);
   }
 }
 
