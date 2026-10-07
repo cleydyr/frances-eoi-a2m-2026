@@ -1,7 +1,7 @@
 {
-  "name": "frances-eoi-2025-m",
+  "name": "frances-eoi-a2m-2026",
   "version": "1.0.0",
-  "description": "Sitio estático para el grupo de francés EOI Valladolid 2025",
+  "description": "Sitio estático para el grupo de francés A2M, EOI Valladolid, 2026",
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server . --watch --no-ui",
@@ -10,7 +10,8 @@
   "keywords": [
     "frances",
     "eoi",
-    "a1",
+    "a2m",
+    "2026",
     "curso"
   ],
   "author": "Cleydyr de Albuquerque",
