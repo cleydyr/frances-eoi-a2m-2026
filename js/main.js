@@ -1,9 +1,9 @@
 const NAV_ITEMS = [
-  { key: "inicio", href: "index.html", label: "Inicio" },
-  { key: "calendario", href: "calendario.html", label: "Calendario" },
-  { key: "resumen", href: "resumen-de-clases.html", label: "Resumen de clases" },
-  { key: "archivos", href: "archivos.html", label: "Archivos" },
-  { key: "avisos", href: "avisos.html", label: "Avisos" },
+  { key: "inicio", href: "/", label: "Inicio" },
+  { key: "calendario", href: "/calendario/", label: "Calendario" },
+  { key: "clases", href: "/clases/", label: "Clases" },
+  { key: "archivos", href: "/archivos/", label: "Archivos" },
+  { key: "avisos", href: "/avisos/", label: "Avisos" },
 ];
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("es-ES", { dateStyle: "long" });
@@ -148,7 +148,7 @@ async function loadNoticesFromJSON() {
     return;
   }
 
-  const sourceUrl = main.dataset.noticeSource || "data/avisos.json";
+  const sourceUrl = main.dataset.noticeSource || "/data/avisos.json";
 
   try {
     const response = await fetch(sourceUrl, { cache: "no-store" });
