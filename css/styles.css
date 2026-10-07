@@ -245,6 +245,31 @@ a:focus {
   transform: translateY(-1px);
 }
 
+.class-search {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.class-search label {
+  font-weight: 600;
+}
+
+.class-search input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(26, 28, 31, 0.15);
+  border-radius: 12px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+.class-search input:focus {
+  outline: 2px solid var(--accent);
+  border-color: transparent;
+}
+
 .summaries,
 .notice-list {
   display: grid;
@@ -257,6 +282,10 @@ a:focus {
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card {
+  scroll-margin-top: 5rem;
 }
 
 .notice-section {
@@ -277,6 +306,24 @@ a:focus {
 .summary-card h2,
 .notice-card h2 {
   margin-top: 0;
+}
+
+.summary-card .class-heading {
+  color: var(--muted);
+}
+
+.summary-card h3 {
+  margin: 1.25rem 0 0;
+  font-size: 1rem;
+}
+
+.summary-card .class-files {
+  margin-top: 1.25rem;
+}
+
+.summary-card .class-files a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .notice-expiration {
@@ -300,7 +347,8 @@ a:focus {
 
 .summary-card ul {
   padding-left: 1.2rem;
-  color: var(--muted);
+  color: var(--text);
+  margin: 0.75rem 0 0;
 }
 
 .file-link {
