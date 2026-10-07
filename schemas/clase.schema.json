@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frances-eoi.local/schemas/clase.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["date", "did"],
+  "properties": {
+    "date": { "$ref": "defs.schema.json#/$defs/isoDate" },
+    "number": { "type": "integer", "minimum": 1 },
+    "title": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "did": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+    },
+    "homework": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+    },
+    "vocab": {
+      "type": "array",
+      "items": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+    },
+    "files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+    }
+  }
+}

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "browser-sync start --server . --watch --no-ui",
+    "validate": "node scripts/validate-data.mjs",
     "deploy": "gh-pages -d ."
   },
   "keywords": [
@@ -17,6 +18,9 @@
   "author": "Cleydyr de Albuquerque",
   "license": "ISC",
   "devDependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "ajv-keywords": "^5.1.0",
     "axios": "^1.20.0",
     "browser-sync": "^3.0.4",
     "gh-pages": "^6.3.0",

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frances-eoi.local/schemas/aviso.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["title", "body", "expiresAt"],
+  "properties": {
+    "title": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "body": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "expiresAt": { "$ref": "defs.schema.json#/$defs/isoDate" },
+    "href": { "$ref": "defs.schema.json#/$defs/httpsUrl" }
+  }
+}
