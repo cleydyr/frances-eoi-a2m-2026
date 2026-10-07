@@ -7,6 +7,29 @@ const NAV_ITEMS = [
 ];
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("es-ES", { dateStyle: "long" });
+const CURSO_URL = "/data/curso.json";
+
+let cursoData = null;
+
+function logoText() {
+  return cursoData ? `Francés EOI ${cursoData.year}` : "Francés EOI 2026";
+}
+
+function footerText() {
+  if (!cursoData) {
+    return "Sitio de la clase de francés A2M, EOI Valladolid, 2026. No es la web oficial de la EOI. Lo mantiene Cleydyr. Para una corrección, escribe por el grupo de WhatsApp.";
+  }
+
+  return `Sitio de la clase de francés ${cursoData.level}, ${cursoData.school}, ${cursoData.year}. No es la web oficial de la EOI. Lo mantiene Cleydyr. Para una corrección, escribe por el grupo de WhatsApp.`;
+}
+
+function introText() {
+  if (!cursoData) {
+    return "Este es el sitio de compañeros de Francés A2M en EOI Valladolid, 2026, para avisos, notas de clase, archivos y el calendario.";
+  }
+
+  return `Este es el sitio de compañeros de Francés ${cursoData.level} en ${cursoData.school}, ${cursoData.year}, para avisos, notas de clase, archivos y el calendario.`;
+}
 
 class AppHeader extends HTMLElement {
   static get observedAttributes() {
@@ -33,7 +56,7 @@ class AppHeader extends HTMLElement {
     this.innerHTML = `
       <header class="site-header">
         <div class="logo-area">
-          <span class="logo">Francés EOI 2025</span>
+          <span class="logo">${logoText()}</span>
           <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav">
             <span class="sr-only">Abrir menú</span>
             ☰
@@ -76,9 +99,13 @@ customElements.define("app-header", AppHeader);
 
 class AppFooter extends HTMLElement {
   connectedCallback() {
+    this.render();
+  }
+
+  render() {
     this.innerHTML = `
       <footer class="site-footer">
-        <p>Hecho con cariño por Cleydyr de Albuquerque para la clase de francés A1 EOI Valladolid · 2025</p>
+        <p>${footerText()}</p>
       </footer>
     `;
   }
@@ -89,7 +116,115 @@ customElements.define("app-footer", AppFooter);
 document.addEventListener("DOMContentLoaded", () => {
   setupSummaryInteractions();
   loadNoticesFromJSON();
+  loadCurso();
 });
+
+async function loadCurso() {
+  try {
+    const response = await fetch(CURSO_URL, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const curso = normalizeCurso(payload);
+    if (!curso) {
+      throw new Error("data/curso.json no tiene año, nivel y escuela");
+    }
+
+    cursoData = curso;
+
+    if (curso.language) {
+      document.documentElement.lang = curso.language;
+    }
+
+    document.title = document.title.replace(/\b20\d{2}\b/, String(curso.year));
+    document.querySelectorAll("app-header").forEach((header) => header.render());
+    document.querySelectorAll("app-footer").forEach((footer) => footer.render());
+
+    const intro = document.querySelector("[data-curso-intro]");
+    if (intro) {
+      intro.textContent = introText();
+    }
+
+    renderCalendar(curso);
+    renderFilesFolder(curso);
+  } catch (error) {
+    console.error("[Curso] No se pudo cargar el curso", error);
+  }
+}
+
+function normalizeCurso(input) {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const year = Number(input.year);
+  const level = typeof input.level === "string" ? input.level.trim() : "";
+  const school = typeof input.school === "string" ? input.school.trim() : "";
+
+  if (!Number.isInteger(year) || !level || !school) {
+    return null;
+  }
+
+  const text = (value) => (typeof value === "string" ? value.trim() : "");
+
+  return {
+    year,
+    level,
+    school,
+    language: text(input.language) || "es",
+    calendarEmbed: text(input.calendarEmbed),
+    calendarWeek: text(input.calendarWeek),
+    calendarMonth: text(input.calendarMonth),
+    calendarAdd: text(input.calendarAdd),
+    filesFolder: text(input.filesFolder),
+    filesNote: text(input.filesNote),
+  };
+}
+
+function renderCalendar(curso) {
+  const mount = document.getElementById("calendario");
+  if (!mount || !curso.calendarEmbed || mount.querySelector("iframe")) {
+    return;
+  }
+
+  const section = document.createElement("section");
+  section.className = "calendar-frame";
+  const iframe = document.createElement("iframe");
+  iframe.title = "Calendario de la clase";
+  iframe.src = curso.calendarEmbed;
+  iframe.loading = "lazy";
+  iframe.referrerPolicy = "no-referrer";
+  section.append(iframe);
+  mount.append(section);
+}
+
+function renderFilesFolder(curso) {
+  const mount = document.getElementById("archivos");
+  if (!mount || !curso.filesFolder || mount.querySelector(".file-link")) {
+    return;
+  }
+
+  const section = document.createElement("section");
+  section.className = "file-link";
+  const link = document.createElement("a");
+  link.className = "btn";
+  link.href = curso.filesFolder;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "Abrir carpeta compartida";
+  section.append(link);
+
+  if (curso.filesNote) {
+    const note = document.createElement("p");
+    note.className = "helper-text";
+    note.textContent = curso.filesNote;
+    section.append(note);
+  }
+
+  mount.append(section);
+}
 
 function setupSummaryInteractions() {
   const summaryButton = document.querySelector('[data-action="add-summary"]');
