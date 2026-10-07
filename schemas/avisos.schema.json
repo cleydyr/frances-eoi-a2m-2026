@@ -1,6 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://frances-eoi.local/schemas/avisos.schema.json",
   "type": "array",
   "items": { "$ref": "aviso.schema.json" }
 }
