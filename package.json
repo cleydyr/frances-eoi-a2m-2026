@@ -16,7 +16,7 @@
   "author": "Cleydyr de Albuquerque",
   "license": "ISC",
   "devDependencies": {
-    "axios": "^1.13.2",
+    "axios": "^1.20.0",
     "browser-sync": "^3.0.4",
     "gh-pages": "^6.3.0",
     "puppeteer": "^24.31.0"
