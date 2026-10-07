@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frances-eoi.local/schemas/ejemplo.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["aviso", "clase", "archivo"],
+  "properties": {
+    "aviso": { "$ref": "aviso.schema.json" },
+    "clase": { "$ref": "clase.schema.json" },
+    "archivo": { "$ref": "archivo.schema.json" }
+  }
+}

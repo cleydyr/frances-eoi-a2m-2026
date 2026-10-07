@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frances-eoi.local/schemas/curso.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["year", "level", "school"],
+  "properties": {
+    "year": { "type": "integer" },
+    "level": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "school": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "language": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "calendarEmbed": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "calendarWeek": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "calendarMonth": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "calendarAdd": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "filesFolder": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "filesNote": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+  }
+}

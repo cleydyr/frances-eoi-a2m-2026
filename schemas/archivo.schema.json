@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frances-eoi.local/schemas/archivo.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "title", "href", "date"],
+  "properties": {
+    "id": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "title": { "$ref": "defs.schema.json#/$defs/nonEmptyString" },
+    "href": { "$ref": "defs.schema.json#/$defs/httpsUrl" },
+    "date": { "$ref": "defs.schema.json#/$defs/isoDate" },
+    "kind": {
+      "enum": ["pdf", "audio", "presentacion", "fotocopia", "otro"]
+    },
+    "note": { "$ref": "defs.schema.json#/$defs/nonEmptyString" }
+  }
+}
