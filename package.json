@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "browser-sync start --server . --watch --no-ui",
     "validate": "node scripts/validate-data.mjs",
+    "scrape": "node --experimental-strip-types scripts/scrape.mjs",
     "deploy": "gh-pages -d ."
   },
   "keywords": [

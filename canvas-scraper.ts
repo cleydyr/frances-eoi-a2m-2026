@@ -14,7 +14,7 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 async function run() {
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-    console.error("TELEGRAM_TOKEN or TELEGRAM_CHAT_ID is not set");
+    console.error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set");
     process.exit(1);
   }
 
@@ -53,7 +53,7 @@ async function run() {
     const currentAbsenceEntries = new Set(
       data
         .map(toAbsenceEntry)
-        .filter(isFrenchA1AbsenceRow)
+        .filter(isFrenchA2AbsenceRow)
         .map(humanFriendlyMessage),
     );
 
@@ -120,8 +120,8 @@ async function sendToTelegram(message: string) {
   }
 }
 
-function isFrenchA1AbsenceRow(absenceEntry: AbsenceEntry): boolean {
-  return absenceEntry.idioma === "FRANCÉS" && absenceEntry.grupo.includes("A1");
+function isFrenchA2AbsenceRow(absenceEntry: AbsenceEntry): boolean {
+  return absenceEntry.idioma === "FRANCÉS" && absenceEntry.grupo.includes("A2");
 }
 
 function humanFriendlyMessage(absenceEntry: AbsenceEntry): string {
