@@ -219,6 +219,24 @@ a:focus {
   }
 }
 
+.calendar-views {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.calendar-views a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.calendar-views a[aria-current="true"] {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
 .helper-text {
   color: var(--muted);
   font-size: 0.95rem;
@@ -454,5 +472,17 @@ a:focus {
   .page-header .btn {
     align-self: stretch;
     justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .calendar-frame {
+    aspect-ratio: auto;
+    min-height: 70vh;
+  }
+
+  .calendar-frame::before {
+    display: none;
+    padding-bottom: 0;
   }
 }

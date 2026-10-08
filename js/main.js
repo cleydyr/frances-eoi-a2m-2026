@@ -197,15 +197,58 @@ function renderCalendar(curso) {
     return;
   }
 
-  const section = document.createElement("section");
-  section.className = "calendar-frame";
   const iframe = document.createElement("iframe");
   iframe.title = "Calendario de la clase";
   iframe.src = curso.calendarEmbed;
   iframe.loading = "lazy";
   iframe.referrerPolicy = "no-referrer";
+
+  const views = document.createElement("nav");
+  views.className = "calendar-views";
+  views.setAttribute("aria-label", "Vistas del calendario");
+
+  [
+    ["Agenda", curso.calendarEmbed],
+    ["Semana", curso.calendarWeek],
+    ["Mes", curso.calendarMonth],
+  ].forEach(([label, url]) => {
+    if (!url) {
+      return;
+    }
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.textContent = label;
+
+    if (label === "Agenda") {
+      link.setAttribute("aria-current", "true");
+    }
+
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      iframe.src = url;
+      views.querySelectorAll("[aria-current]").forEach((item) => {
+        item.removeAttribute("aria-current");
+      });
+      link.setAttribute("aria-current", "true");
+    });
+
+    views.append(link);
+  });
+
+  if (curso.calendarAdd) {
+    const add = document.createElement("a");
+    add.href = curso.calendarAdd;
+    add.target = "_blank";
+    add.rel = "noopener";
+    add.textContent = "Añadir a mi calendario";
+    views.append(add);
+  }
+
+  const section = document.createElement("section");
+  section.className = "calendar-frame";
   section.append(iframe);
-  mount.append(section);
+  mount.append(views, section);
 }
 
 function renderFilesFolder(curso) {
