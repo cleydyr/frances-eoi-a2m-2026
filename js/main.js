@@ -8,6 +8,13 @@ const NAV_ITEMS = [
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("es-ES", { dateStyle: "long" });
 const CURSO_URL = "/data/curso.json";
+const FILE_KIND_LABELS = {
+  pdf: "PDF",
+  audio: "Audio",
+  presentacion: "Presentación",
+  fotocopia: "Fotocopia",
+  otro: "Otro",
+};
 
 let cursoData = null;
 
@@ -116,6 +123,7 @@ customElements.define("app-footer", AppFooter);
 document.addEventListener("DOMContentLoaded", () => {
   loadNoticesFromJSON();
   loadClassesFromJSON();
+  loadFilesFromJSON();
   loadCurso();
 });
 
@@ -223,7 +231,143 @@ function renderFilesFolder(curso) {
     section.append(note);
   }
 
-  mount.append(section);
+  mount.prepend(section);
+}
+
+async function loadFilesFromJSON() {
+  const mount = document.getElementById("archivos");
+  if (!mount) {
+    return;
+  }
+
+  try {
+    const response = await fetch("/data/archivos.json", { cache: "no-store" });
+    if (response.status === 404) {
+      renderFileIndex(mount, []);
+      return;
+    }
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    renderFileIndex(mount, normalizeFileIndex(payload));
+  } catch (error) {
+    console.error("[Archivos] No se pudieron cargar los archivos", error);
+    renderFileIndexError(mount);
+  }
+}
+
+function normalizeFileIndex(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  const byId = new Map();
+
+  items.forEach((item) => {
+    const file = normalizeFile(item);
+    if (!file) {
+      return;
+    }
+
+    const previous = byId.get(file.id);
+    byId.set(
+      file.id,
+      previous ? { ...file, order: previous.order } : { ...file, order: byId.size }
+    );
+  });
+
+  return [...byId.values()].sort((a, b) => b.date - a.date || a.order - b.order);
+}
+
+function normalizeFile(input) {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const id = typeof input.id === "string" ? input.id.trim() : "";
+  const title = typeof input.title === "string" ? input.title.trim() : "";
+  const href = typeof input.href === "string" ? input.href.trim() : "";
+  const parsedDate = parseIsoDate(input.date);
+
+  if (!id || !title || !href || !parsedDate) {
+    return null;
+  }
+
+  const kind = typeof input.kind === "string" ? input.kind.trim() : "";
+  const note = typeof input.note === "string" ? input.note.trim() : "";
+
+  return {
+    id,
+    title,
+    href,
+    isoDate: parsedDate.iso,
+    date: parsedDate.date,
+    kind: Object.hasOwn(FILE_KIND_LABELS, kind) ? kind : "",
+    note,
+  };
+}
+
+function renderFileIndex(mount, files) {
+  const list = fileIndexElement(mount);
+  list.replaceChildren();
+
+  if (!files.length) {
+    list.append(createEmptyState("Los archivos nuevos aparecen aquí cuando están en la carpeta."));
+    return;
+  }
+
+  files.forEach((file) => {
+    list.append(createFileCard(file));
+  });
+}
+
+function renderFileIndexError(mount) {
+  const list = fileIndexElement(mount);
+  list.replaceChildren(createEmptyState("No se pudieron cargar los archivos."));
+}
+
+function fileIndexElement(mount) {
+  const existing = mount.querySelector(".file-index");
+  if (existing) {
+    return existing;
+  }
+
+  const list = document.createElement("div");
+  list.className = "file-index summaries";
+  mount.append(list);
+  return list;
+}
+
+function createFileCard(file) {
+  const article = document.createElement("article");
+  article.className = "summary-card file-card";
+
+  const heading = document.createElement("h2");
+  const link = document.createElement("a");
+  link.href = file.href;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = file.title;
+  heading.append(link);
+  article.append(heading);
+
+  const meta = document.createElement("p");
+  meta.className = "file-meta";
+  const dateLabel = formatNoticeDate(file.date);
+  const kindLabel = FILE_KIND_LABELS[file.kind];
+  meta.textContent = kindLabel ? `${kindLabel} · ${dateLabel}` : dateLabel;
+  article.append(meta);
+
+  if (file.note) {
+    const note = document.createElement("p");
+    note.className = "helper-text";
+    note.textContent = file.note;
+    article.append(note);
+  }
+
+  return article;
 }
 
 async function loadClassesFromJSON() {
@@ -381,34 +525,11 @@ async function loadClassFiles(notes) {
 function indexFiles(items) {
   const files = new Map();
 
-  if (!Array.isArray(items)) {
-    return files;
-  }
-
-  items.forEach((item) => {
-    const file = normalizeLinkedFile(item);
-    if (file) {
-      files.set(file.id, file);
-    }
+  normalizeFileIndex(items).forEach((file) => {
+    files.set(file.id, file);
   });
 
   return files;
-}
-
-function normalizeLinkedFile(input) {
-  if (!input || typeof input !== "object") {
-    return null;
-  }
-
-  const id = typeof input.id === "string" ? input.id.trim() : "";
-  const title = typeof input.title === "string" ? input.title.trim() : "";
-  const href = typeof input.href === "string" ? input.href.trim() : "";
-
-  if (!id || !title || !href || !parseIsoDate(input.date)) {
-    return null;
-  }
-
-  return { id, title, href };
 }
 
 function renderClasses(mount, notes, files) {
