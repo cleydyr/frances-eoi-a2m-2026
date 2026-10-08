@@ -1,0 +1,28 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["/data/curso.json"],
+      "url": "./schemas/curso.schema.json"
+    },
+    {
+      "fileMatch": ["/data/avisos.json"],
+      "url": "./schemas/avisos.schema.json"
+    },
+    {
+      "fileMatch": ["/data/clases.json"],
+      "url": "./schemas/clases.schema.json"
+    },
+    {
+      "fileMatch": ["/data/archivos.json"],
+      "url": "./schemas/archivos.schema.json"
+    },
+    {
+      "fileMatch": ["/data/absences.json"],
+      "url": "./schemas/absences.schema.json"
+    },
+    {
+      "fileMatch": ["/data/ejemplo.json"],
+      "url": "./schemas/ejemplo.schema.json"
+    }
+  ]
+}
