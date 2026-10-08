@@ -385,6 +385,10 @@ a:focus {
   font-weight: 600;
 }
 
+.notice-body {
+  color: var(--text);
+}
+
 .notice-expiration {
   color: var(--muted);
   font-size: 0.9rem;
