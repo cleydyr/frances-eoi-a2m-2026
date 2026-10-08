@@ -1,12 +1,7 @@
 [
     {
-        "title": "Elecciones de delegados",
-        "body": "Se elegirán los delegados y subdelegados para el curso. La elección se realizará el próximo martes 28 durante la clase.",
-        "expiresAt": "2025-10-28"
-    },
-    {
-        "title": "Ausencia de clase",
-        "body": "El próximo viernes 28 no habrá clase.",
-        "expiresAt": "2025-11-29"
+        "title": "Sesión de cine",
+        "body": "El jueves 15 de octubre a las 12:00 (mediodía) hay sesión de cine en el Cine Casablanca. Película: L'inconnu de la Grande Arche.",
+        "expiresAt": "2026-10-15"
     }
 ]
