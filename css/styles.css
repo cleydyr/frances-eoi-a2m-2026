@@ -294,6 +294,28 @@ a:focus {
   margin-bottom: 2.5rem;
 }
 
+#home {
+  display: grid;
+  gap: 2.5rem;
+}
+
+#home .notice-section {
+  margin-bottom: 0;
+}
+
+.home-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 0;
+}
+
+.home-links a,
+#home .notice-section > a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .notice-section:last-of-type {
   margin-bottom: 0;
 }

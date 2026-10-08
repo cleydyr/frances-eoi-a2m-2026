@@ -121,6 +121,7 @@ class AppFooter extends HTMLElement {
 customElements.define("app-footer", AppFooter);
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadHome();
   loadNoticesFromJSON();
   loadClassesFromJSON();
   loadFilesFromJSON();
@@ -587,7 +588,7 @@ function renderClasses(mount, notes, files) {
   openHashedClass();
 }
 
-function createClassCard(note, files) {
+function createClassCard(note, files, linkHref = `#${note.isoDate}`) {
   const article = document.createElement("article");
   article.className = "summary-card";
   article.id = note.isoDate;
@@ -599,7 +600,7 @@ function createClassCard(note, files) {
   heading.className = "class-heading";
 
   const link = document.createElement("a");
-  link.href = `#${note.isoDate}`;
+  link.href = linkHref;
   link.textContent = classHeading(note);
   heading.append(link);
 
@@ -681,6 +682,98 @@ function openHashedClass() {
   }
 
   document.getElementById(id)?.scrollIntoView();
+}
+
+async function loadHome() {
+  const mount = document.getElementById("home");
+  if (!mount) {
+    return;
+  }
+
+  const [notices, classes] = await Promise.all([fetchHomeNotices(), fetchHomeClass()]);
+  renderHome(mount, notices, classes);
+}
+
+async function fetchHomeNotices() {
+  try {
+    const response = await fetch("/data/avisos.json", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    return { current: splitNotices(payload).current, error: false };
+  } catch (error) {
+    console.error("[Avisos] No se pudieron cargar los avisos", error);
+    return { current: [], error: true };
+  }
+}
+
+async function fetchHomeClass() {
+  try {
+    const response = await fetch("/data/clases.json", { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    const notes = normalizeClasses(payload).slice(0, 1);
+    const files = await loadClassFiles(notes);
+    return { note: notes[0] || null, files, error: false };
+  } catch (error) {
+    console.error("[Clases] No se pudieron cargar las clases", error);
+    return { note: null, files: new Map(), error: true };
+  }
+}
+
+function renderHome(mount, notices, classes) {
+  const noticeSection = document.createElement("section");
+  noticeSection.className = "notice-section";
+
+  const noticeList = document.createElement("div");
+  noticeList.className = "notice-list";
+
+  if (notices.error) {
+    noticeList.append(createEmptyState("No se pudieron cargar los avisos."));
+  } else if (!notices.current.length) {
+    noticeList.append(createEmptyState("No hay avisos activos por ahora."));
+  } else {
+    notices.current.slice(0, 3).forEach((notice) => {
+      noticeList.append(createNoticeCard(notice));
+    });
+  }
+
+  const allNotices = document.createElement("a");
+  allNotices.href = "/avisos/";
+  allNotices.textContent = "Todos los avisos";
+  noticeSection.append(noticeList, allNotices);
+
+  let classBlock;
+  if (classes.error) {
+    classBlock = createEmptyState("No se pudieron cargar las clases.");
+  } else if (!classes.note) {
+    classBlock = createEmptyState("Todavía no hay notas de clase.");
+  } else {
+    classBlock = createClassCard(
+      classes.note,
+      classes.files,
+      `/clases/#${classes.note.isoDate}`
+    );
+  }
+
+  const links = document.createElement("p");
+  links.className = "home-links";
+
+  const calendar = document.createElement("a");
+  calendar.href = "/calendario/";
+  calendar.textContent = "Ver calendario";
+
+  const filesLink = document.createElement("a");
+  filesLink.href = "/archivos/";
+  filesLink.textContent = "Ver archivos";
+
+  links.append(calendar, filesLink);
+  mount.replaceChildren(noticeSection, classBlock, links);
 }
 
 async function loadNoticesFromJSON() {
