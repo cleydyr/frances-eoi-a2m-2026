@@ -303,9 +303,28 @@ a:focus {
   background: rgba(111, 119, 129, 0.08);
 }
 
+.notice-expired {
+  margin-top: 2.5rem;
+}
+
+.notice-expired summary {
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.notice-expired .notice-list {
+  margin-top: 1rem;
+}
+
 .summary-card h2,
 .notice-card h2 {
   margin-top: 0;
+}
+
+.notice-card h2 a {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 .summary-card .class-heading {
