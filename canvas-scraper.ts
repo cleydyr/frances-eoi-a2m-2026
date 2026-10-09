@@ -73,16 +73,16 @@ async function run() {
     const message = Array.from(newAbsenceEntries).join("\n");
 
     await sendToTelegram(`📊 **Canva Data Scrape**\n\n${message}`);
+    await recordAbsences([...pastAbsences, ...newAbsenceEntries]);
   } catch (error) {
-    if (error instanceof Error) {
-      console.error("Error:", error.message);
-      await sendToTelegram(`⚠️ **Scraping Failed**\n\nError: ${error.message}`);
-      process.exit(1);
-    } else {
-      console.error("Error:", error);
-      await sendToTelegram(`⚠️ **Scraping Failed**\n\nError: ${error}`);
-      process.exit(1);
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error("Error:", detail);
+    try {
+      await sendToTelegram(`⚠️ **Scraping Failed**\n\nError: ${detail}`);
+    } catch (notifyError) {
+      console.error("Failed to report the scrape error:", notifyError);
     }
+    process.exit(1);
   } finally {
     await browser.close();
   }
@@ -117,6 +117,7 @@ async function sendToTelegram(message: string) {
     } else {
       console.error("Failed to send Telegram message:", err);
     }
+    throw err;
   }
 }
 
@@ -134,6 +135,11 @@ function humanFriendlyMessage(absenceEntry: AbsenceEntry): string {
 async function readPastAbsences(): Promise<Set<string>> {
   const absences = await fs.readFile("data/absences.json", "utf8");
   return new Set<string>(JSON.parse(absences) as string[]);
+}
+
+async function recordAbsences(absences: string[]) {
+  await fs.writeFile("data/absences.json", `${JSON.stringify(absences, null, 4)}\n`);
+  console.log("Recorded absences:", absences);
 }
 
 // runs the code
