@@ -428,8 +428,9 @@ async function loadClassesFromJSON() {
 
     const payload = await response.json();
     const notes = normalizeClasses(payload);
-    const files = await loadClassFiles(notes);
-    renderClasses(mount, notes, files);
+    const bulletins = await loadBulletins();
+    const files = await loadReferencedFiles(notes, bulletins);
+    renderClasses(mount, notes, files, bulletins);
   } catch (error) {
     console.error("[Clases] No se pudieron cargar las clases", error);
     mount.replaceChildren(createEmptyState("No se pudieron cargar las clases."));
@@ -547,8 +548,96 @@ function classHeading(note) {
   return parts.join(" · ");
 }
 
-async function loadClassFiles(notes) {
-  if (!notes.some((note) => note.files.length)) {
+async function loadBulletins() {
+  try {
+    const response = await fetch("/data/boletines.json", { cache: "no-store" });
+    if (response.status === 404) {
+      return [];
+    }
+    if (!response.ok) {
+      throw new Error(`Estado HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    return normalizeBulletins(payload);
+  } catch (error) {
+    console.error("[Boletines] No se pudieron cargar los boletines", error);
+    return [];
+  }
+}
+
+function normalizeBulletins(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  const byDate = new Map();
+
+  items.forEach((item) => {
+    const bulletin = normalizeBulletin(item);
+    if (bulletin) {
+      byDate.set(bulletin.isoDate, bulletin);
+    }
+  });
+
+  return [...byDate.values()].sort((a, b) => b.date - a.date);
+}
+
+function normalizeBulletin(input) {
+  if (!input || typeof input !== "object") {
+    return null;
+  }
+
+  const parsedDate = parseIsoDate(input.date);
+  const covers = uniqueStrings(stringList(input.covers)).filter((value) => parseIsoDate(value));
+
+  if (!parsedDate || !covers.length) {
+    return null;
+  }
+
+  return {
+    isoDate: parsedDate.iso,
+    date: parsedDate.date,
+    covers,
+    files: uniqueStrings(stringList(input.files)),
+  };
+}
+
+function extrasForClass(note, bulletins, files) {
+  const own = new Set(note.files);
+  const seen = new Set();
+  const extras = [];
+
+  bulletins.forEach((bulletin) => {
+    if (!bulletin.covers.includes(note.isoDate)) {
+      return;
+    }
+
+    bulletin.files.forEach((id) => {
+      if (own.has(id) || seen.has(id)) {
+        return;
+      }
+
+      const file = files.get(id);
+      if (!file) {
+        return;
+      }
+
+      seen.add(id);
+      extras.push(file);
+    });
+  });
+
+  return extras;
+}
+
+async function loadReferencedFiles(notes, bulletins) {
+  const covered = new Set(notes.map((note) => note.isoDate));
+  const bulletinNeedsFiles = bulletins.some(
+    (bulletin) => bulletin.files.length && bulletin.covers.some((date) => covered.has(date))
+  );
+
+  if (!notes.some((note) => note.files.length) && !bulletinNeedsFiles) {
     return new Map();
   }
 
@@ -576,7 +665,7 @@ function indexFiles(items) {
   return files;
 }
 
-function renderClasses(mount, notes, files) {
+function renderClasses(mount, notes, files, bulletins) {
   mount.replaceChildren();
 
   if (!notes.length) {
@@ -604,7 +693,9 @@ function renderClasses(mount, notes, files) {
   list.id = "class-list";
   list.className = "summaries";
 
-  const cards = notes.map((note) => createClassCard(note, files));
+  const cards = notes.map((note) =>
+    createClassCard(note, files, `#${note.isoDate}`, extrasForClass(note, bulletins, files))
+  );
   cards.forEach((card) => list.append(card));
 
   const noMatch = createEmptyState("Ninguna clase coincide con la búsqueda.");
@@ -631,12 +722,18 @@ function renderClasses(mount, notes, files) {
   openHashedClass();
 }
 
-function createClassCard(note, files, linkHref = `#${note.isoDate}`) {
+function createClassCard(note, files, linkHref = `#${note.isoDate}`, extras = []) {
   const article = document.createElement("article");
   article.className = "summary-card";
   article.id = note.isoDate;
   article.dataset.search = foldSearch(
-    [note.title, ...note.did, ...note.homework, ...note.vocab].join("\n")
+    [
+      note.title,
+      ...note.did,
+      ...note.homework,
+      ...note.vocab,
+      ...extras.flatMap((file) => [file.title, file.note]),
+    ].join("\n")
   );
 
   const heading = document.createElement("h2");
@@ -662,7 +759,19 @@ function createClassCard(note, files, linkHref = `#${note.isoDate}`) {
     article.append(createFileList(linked));
   }
 
+  if (extras.length) {
+    article.append(createLabeledFileList("Del boletín", extras));
+  }
+
   return article;
+}
+
+function createLabeledFileList(label, files) {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  heading.textContent = label;
+  section.append(heading, createFileList(files));
+  return section;
 }
 
 function createLabeledList(label, items) {
@@ -761,11 +870,12 @@ async function fetchHomeClass() {
 
     const payload = await response.json();
     const notes = normalizeClasses(payload).slice(0, 1);
-    const files = await loadClassFiles(notes);
-    return { note: notes[0] || null, files, error: false };
+    const bulletins = await loadBulletins();
+    const files = await loadReferencedFiles(notes, bulletins);
+    return { note: notes[0] || null, files, bulletins, error: false };
   } catch (error) {
     console.error("[Clases] No se pudieron cargar las clases", error);
-    return { note: null, files: new Map(), error: true };
+    return { note: null, files: new Map(), bulletins: [], error: true };
   }
 }
 
@@ -800,7 +910,8 @@ function renderHome(mount, notices, classes) {
     classBlock = createClassCard(
       classes.note,
       classes.files,
-      `/clases/#${classes.note.isoDate}`
+      `/clases/#${classes.note.isoDate}`,
+      extrasForClass(classes.note, classes.bulletins, classes.files)
     );
   }
 

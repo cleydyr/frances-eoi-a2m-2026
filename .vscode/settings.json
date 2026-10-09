@@ -17,6 +17,10 @@
       "url": "./schemas/archivos.schema.json"
     },
     {
+      "fileMatch": ["/data/boletines.json"],
+      "url": "./schemas/boletines.schema.json"
+    },
+    {
       "fileMatch": ["/data/absences.json"],
       "url": "./schemas/absences.schema.json"
     },

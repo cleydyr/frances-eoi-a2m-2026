@@ -15,6 +15,7 @@ const checks = [
   { file: "data/clases.json", schema: "clases.schema.json", required: false },
   { file: "data/absences.json", schema: "absences.schema.json", required: true },
   { file: "data/archivos.json", schema: "archivos.schema.json", required: false },
+  { file: "data/boletines.json", schema: "boletines.schema.json", required: false },
   { file: "data/ejemplo.json", schema: "ejemplo.schema.json", required: false },
 ];
 
@@ -57,6 +58,7 @@ for (const check of checks) {
 }
 
 errors.push(...unmatchedClassFileIds(loaded));
+errors.push(...unmatchedBulletinRefs(loaded));
 
 if (errors.length > 0) {
   for (const error of errors) {
@@ -127,6 +129,49 @@ function unmatchedClassFileIds(files) {
         );
       }
     });
+  });
+
+  return unmatched;
+}
+
+function unmatchedBulletinRefs(files) {
+  const boletines = files.get("data/boletines.json");
+  if (!boletines || boletines.status !== "valid") {
+    return [];
+  }
+
+  const clases = files.get("data/clases.json");
+  const archivos = files.get("data/archivos.json");
+  const classDates = new Set(
+    clases?.status === "valid" ? clases.data.map((note) => note.date) : [],
+  );
+  const knownIds = new Set(
+    archivos?.status === "valid" ? archivos.data.map((file) => file.id) : [],
+  );
+  const checkCovers = clases?.status === "valid";
+  const checkFiles = !archivos || archivos.status !== "invalid";
+  const unmatched = [];
+
+  boletines.data.forEach((bulletin, bulletinIndex) => {
+    if (checkCovers) {
+      (bulletin.covers ?? []).forEach((date, coverIndex) => {
+        if (!classDates.has(date)) {
+          unmatched.push(
+            `data/boletines.json /${bulletinIndex}/covers/${coverIndex} ${JSON.stringify(date)} is not in data/clases.json`,
+          );
+        }
+      });
+    }
+
+    if (checkFiles) {
+      (bulletin.files ?? []).forEach((id, fileIndex) => {
+        if (!knownIds.has(id)) {
+          unmatched.push(
+            `data/boletines.json /${bulletinIndex}/files/${fileIndex} ${JSON.stringify(id)} is not in data/archivos.json`,
+          );
+        }
+      });
+    }
   });
 
   return unmatched;

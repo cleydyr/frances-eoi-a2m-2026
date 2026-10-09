@@ -380,6 +380,10 @@ a:focus {
   margin-top: 1.25rem;
 }
 
+.summary-card section .class-files {
+  margin-top: 0.75rem;
+}
+
 .summary-card .class-files a {
   color: var(--accent);
   font-weight: 600;
