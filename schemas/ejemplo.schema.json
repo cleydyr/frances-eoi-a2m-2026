@@ -2,10 +2,11 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "additionalProperties": false,
-  "required": ["aviso", "clase", "archivo"],
+  "required": ["aviso", "clase", "archivo", "boletin"],
   "properties": {
     "aviso": { "$ref": "aviso.schema.json" },
     "clase": { "$ref": "clase.schema.json" },
-    "archivo": { "$ref": "archivo.schema.json" }
+    "archivo": { "$ref": "archivo.schema.json" },
+    "boletin": { "$ref": "boletin.schema.json" }
   }
 }

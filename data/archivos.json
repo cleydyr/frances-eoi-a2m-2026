@@ -1,23 +1,66 @@
 [
   {
-    "id": "2026-10-06-c01-admin_fr_a2_eoi",
-    "title": "Admin FR A2 EOI",
-    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-06-c01-admin_fr_a2_eoi.pdf",
+    "id": "2026-10-09-ressources-utiles",
+    "title": "Ressources utiles",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-09-ressources-utiles.pdf",
+    "date": "2026-10-09",
+    "kind": "pdf",
+    "note": "Para aprender francés en casa."
+  },
+  {
+    "id": "2026-10-08-c02-nouveau-rond-point",
+    "title": "Nouveau Rond-Point 1 — 15",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-nouveau-rond-point.mp3",
+    "date": "2026-10-08",
+    "kind": "audio"
+  },
+  {
+    "id": "2026-10-08-c02-le-voisin-philippe",
+    "title": "Le voisin Philippe",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-le-voisin-philippe.pdf",
+    "date": "2026-10-08",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-10-08-c02-conjugaison-bilan",
+    "title": "Conjugaison Présent indicatif — Bilan",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-conjugaison-bilan.pdf",
+    "date": "2026-10-08",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-10-08-c02-groupe-verbes-present",
+    "title": "Le groupe des verbes au présent",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-groupe-verbes-present.pdf",
+    "date": "2026-10-08",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-10-08-c02-jouer-a-de",
+    "title": "Jouer à, faire de, jouer de",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-jouer-a-de.pdf",
+    "date": "2026-10-08",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-10-06-c01-documento-inicio",
+    "title": "Documento inicio de curso A2",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-06-c01-documento-inicio.pdf",
     "date": "2026-10-06",
     "kind": "fotocopia"
   },
   {
-    "id": "2026-10-08-c02-conjugaison",
-    "title": "Conjugaison",
-    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-conjugaison.pdf",
-    "date": "2026-10-08",
+    "id": "2026-10-06-c01-informacion-alumnos",
+    "title": "Información para los alumnos 2026-27",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-06-c01-informacion-alumnos.pdf",
+    "date": "2026-10-06",
     "kind": "fotocopia"
   },
   {
-    "id": "2026-10-08-c02-revision-cours",
-    "title": "Révision cours",
-    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-08-c02-revision-cours.pdf",
-    "date": "2026-10-08",
+    "id": "2026-10-06-c01-speed-dating",
+    "title": "Fiches pour le speed-dating",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-10-06-c01-speed-dating.pdf",
+    "date": "2026-10-06",
     "kind": "fotocopia"
   }
 ]

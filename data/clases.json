@@ -9,7 +9,11 @@
       "Dinámica 1: investigadores",
       "Dinámica 2: speed dating"
     ],
-    "files": ["2026-10-06-c01-admin_fr_a2_eoi"]
+    "files": [
+      "2026-10-06-c01-documento-inicio",
+      "2026-10-06-c01-informacion-alumnos",
+      "2026-10-06-c01-speed-dating"
+    ]
   },
   {
     "number": 2,
@@ -18,6 +22,16 @@
       "Revisión 1: fiche de présentación; identifier x décrire (c'est x il/elle est)",
       "Revisión 2: De nouveaux voisins arrivent (ecouter)"
     ],
-    "files": ["2026-10-08-c02-revision-cours", "2026-10-08-c02-conjugaison"]
+    "homework": [
+      "Practicar la conjugación del presente con « Conjugaison Présent Indicatif Bilan ». « Le groupe des verbes au présent » sirve de apoyo.",
+      "Ficha « jouer à / de »: enviarla por correo a Marina o entregarla en clase."
+    ],
+    "files": [
+      "2026-10-08-c02-nouveau-rond-point",
+      "2026-10-08-c02-le-voisin-philippe",
+      "2026-10-08-c02-conjugaison-bilan",
+      "2026-10-08-c02-groupe-verbes-present",
+      "2026-10-08-c02-jouer-a-de"
+    ]
   }
 ]
