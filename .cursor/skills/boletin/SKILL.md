@@ -4,7 +4,7 @@ description: >-
   Read the teacher's weekly French-class newsletter from Gmail, upload new
   attachments to Seafile, and file them into clases, archivos, and boletines.
   Use when the user invokes /boletin or asks to incorporate the latest
-  newsletter, boletín, or Marina's weekly email into the site.
+  newsletter or boletín into the site.
 argument-hint: "[date or latest]"
 disable-model-invocation: true
 ---
@@ -21,7 +21,7 @@ If the user passes a date, use that newsletter. Otherwise use the latest one who
 
 Gmail tools are in the `plugin-gmail-gmail` namespace. If the namespace needs auth, call `mcp_auth`, then discover tool schemas before calling them.
 
-Search with `from:marinar.morcan@educa.jcyl.es has:attachment` plus the date constraint. Read the message as `PLAIN_TEXT` for the body and attachment names. Attachment bytes are not in that response. Fetch `RAW`, base64url-decode it, and walk the MIME parts with Python's `email` package. Write the files under `/tmp`, never in the repo.
+Search the signed-in inbox for the weekly packing list: `has:attachment` plus a phrase from the letter, such as `activités complémentaires`, and the date constraint. Do not write the sender address, the recipient list, or message ids into the repo or the reply. Read the message as `PLAIN_TEXT` for the body and attachment names. Attachment bytes are not in that response. Fetch `RAW`, base64url-decode it, and walk the MIME parts with Python's `email` package. Write the files under `/tmp`, never in the repo.
 
 ## 2. Sort each attachment once
 
