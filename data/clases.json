@@ -33,5 +33,35 @@
       "2026-10-08-c02-groupe-verbes-present",
       "2026-10-08-c02-jouer-a-de"
     ]
+  },
+  {
+    "number": 3,
+    "date": "2026-10-13",
+    "did": [
+      "Chanson « Une semaine à Paris » (cartons à projeter)"
+    ],
+    "files": [
+      "2026-10-13-c03-une-semaine-a-paris-cartons"
+    ]
+  },
+  {
+    "number": 4,
+    "date": "2026-10-15",
+    "did": [
+      "Révision du passé composé",
+      "Chanson « Une semaine à Paris » : texte à trous y corrigés",
+      "Chanson « Une semaine à Paris » (cartons à projeter)"
+    ],
+    "homework": [
+      "Completar los huecos que quedan en « Une semaine à Paris » y corregirlos con los corrigés.",
+      "Escribir « Une lettre à ta professeure de français » (unas 90 palabras): hablar de ti, de un recuerdo con el francés y de lo que quieres aprender este año."
+    ],
+    "files": [
+      "2026-10-15-c04-passe-compose-revision",
+      "2026-10-15-c04-une-semaine-a-paris-texte-a-trou",
+      "2026-10-15-c04-une-semaine-a-paris-corriges",
+      "2026-10-15-c04-production-ecrite-lettre",
+      "2026-10-13-c03-une-semaine-a-paris-cartons"
+    ]
   }
 ]
