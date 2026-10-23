@@ -3,6 +3,7 @@ name: boletin
 description: >-
   Read the teacher's weekly French-class newsletter from Gmail, upload new
   attachments to Seafile, and file them into clases, archivos, and boletines.
+  Then give a Spanish WhatsApp summary and a PDF of the original letter.
   Use when the user invokes /boletin or asks to incorporate the latest
   newsletter or boletín into the site.
 argument-hint: "[date or latest]"
@@ -86,3 +87,39 @@ Do not delete a file whose text does not match.
 ## 5. Check
 
 Run `npm run validate`. File ids on a class or a boletín must exist in `data/archivos.json`. Then open Inicio, Clases, and Archivos and confirm the new links render and the removed scans do not. Search should find the new homework and the gift title.
+
+## 6. For the WhatsApp group
+
+Do not post the message. Do not copy the letter onto the site. After the check, give two things the user can share.
+
+**Summary.** Spanish, short enough to paste. Same shape as this one: a dated first line, the week's documents with her French titles and the `filesFolder` link, an optional gift only when she offered one, homework as a Spanish instruction plus the French title and the link, and her sign-off turned into Spanish (`Buen fin de semana. Nos vemos el martes.` when she wrote bon week-end / à mardi). `vosotros` is fine. No addresses and no message id.
+
+```
+Boletín del 22 de octubre
+
+Esta semana trabajamos las presentaciones. En la carpeta están:
+
+• Les présentations (vídeo ralentizado)
+• Les présentations dans la villa Marie-Claire
+• Qui est-ce ?
+
+https://seafile.biblivre.app/d/bb95955a0c7e4378a712/
+
+Si fuisteis a La petite Casbah, podéis escribir las impresiones aquí:
+https://www.menti.com/al2uvcfq4wy5
+
+Para practicar C'est / Il est en casa:
+
+• Quiz « C'est / Il est »
+https://wordwall.net/resource/54255723?wwmethod=link
+
+• Clasificación « C'est/Il est »
+https://wordwall.net/resource/66175508?wwmethod=link
+
+• Quiz « C'est / Ce sont / Il est / Elle est »
+https://wordwall.net/resource/91705123?wwmethod=link
+
+Buen fin de semana. Nos vemos el martes.
+```
+
+**PDF.** A PDF of the original letter: her subject and plain-text body, including her links, in her wording. Leave out the transport headers, every address, and the attachment bytes. Write the text under `/tmp`. `textutil` cannot write a PDF, and `cupsfilter` stops at an emoji and drops the rest of the letter. Render it with `fpdf2` from a venv in `/tmp`, not a project dependency, using a system font that covers the letter. If a glyph is missing, omit that glyph and keep the sentence. Save `$HOME/Downloads/YYYY-MM-DD-boletin.pdf`, dated with the send date, and put that path in the reply.
