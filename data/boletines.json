@@ -1,5 +1,10 @@
 [
   {
+    "date": "2026-10-22",
+    "covers": ["2026-10-20", "2026-10-22"],
+    "files": ["2026-10-22-petite-casbah-impressions"]
+  },
+  {
     "date": "2026-10-16",
     "covers": ["2026-10-13", "2026-10-15"],
     "files": ["2026-10-16-prononciation-present"]
