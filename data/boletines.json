@@ -1,5 +1,14 @@
 [
   {
+    "date": "2026-10-30",
+    "covers": ["2026-10-27", "2026-10-29"],
+    "files": [
+      "2026-10-30-gateaux-halloween",
+      "2026-10-30-comedien-parisien",
+      "2026-10-30-chanson-des-squelettes"
+    ]
+  },
+  {
     "date": "2026-10-22",
     "covers": ["2026-10-20", "2026-10-22"],
     "files": ["2026-10-22-petite-casbah-impressions"]
