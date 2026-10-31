@@ -97,5 +97,47 @@
       "2026-10-22-c06-cest-il-est-classement",
       "2026-10-22-c06-cest-ce-sont-quiz"
     ]
+  },
+  {
+    "number": 7,
+    "date": "2026-10-27",
+    "did": [
+      "Compréhension écrite « Invitation à une soirée »",
+      "Révision du COD",
+      "La règle LuCiFeR (consonnes finales)"
+    ],
+    "files": [
+      "2026-10-27-c07-invitation-soiree-cod",
+      "2026-10-27-c07-regle-lucifer"
+    ]
+  },
+  {
+    "number": 8,
+    "date": "2026-10-29",
+    "did": [
+      "Halloween ou la Toussaint : vocabulario, le trouillomètre de la peur y quiz"
+    ],
+    "homework": [
+      "Hacer el quiz « C'est / Il est ».",
+      "Clasificar en « C'est/Il est ».",
+      "Hacer el quiz « C'est / Ce sont / Il est / Elle est ».",
+      "Hacer el quiz « Les pronoms compléments d'objet direct le, la, l', les ».",
+      "Recorrer el laberinto « Passé composé ».",
+      "Jugar al topo « Passé composé ».",
+      "Emparejar « Le passé composé ».",
+      "Ordenar « Le passé composé »."
+    ],
+    "files": [
+      "2026-10-29-c08-halloween-ou-la-toussaint-pdf",
+      "2026-10-29-c08-halloween-ou-la-toussaint",
+      "2026-10-22-c06-cest-il-est-quiz",
+      "2026-10-22-c06-cest-il-est-classement",
+      "2026-10-22-c06-cest-ce-sont-quiz",
+      "2026-10-29-c08-cod-quiz",
+      "2026-10-29-c08-passe-compose-laberinto",
+      "2026-10-29-c08-passe-compose-topo",
+      "2026-10-29-c08-passe-compose-emparejar",
+      "2026-10-29-c08-passe-compose-ordenar"
+    ]
   }
 ]
