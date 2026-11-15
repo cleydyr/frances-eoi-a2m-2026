@@ -1,5 +1,41 @@
 [
   {
+    "id": "2026-11-14-les-cornichons",
+    "title": "Les cornichons",
+    "href": "https://www.youtube.com/watch?v=WYMSjg3RxYk",
+    "date": "2026-11-14",
+    "note": "Una canción muy conocida en Francia, con el vocabulario de la comida."
+  },
+  {
+    "id": "2026-11-12-c12-ma-recette-de-cuisine",
+    "title": "Ma recette de cuisine",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-11-12-c12-ma-recette-de-cuisine.pdf",
+    "date": "2026-11-12",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-11-10-c11-articles-partitifs",
+    "title": "Articles partitifs, adverbes de quantité",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-11-10-c11-articles-partitifs.pdf",
+    "date": "2026-11-10",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-11-10-c11-comprehension-mousse-au-chocolat",
+    "title": "Compréhension orale — La recette de la mousse au chocolat",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-11-10-c11-comprehension-mousse-au-chocolat.pdf",
+    "date": "2026-11-10",
+    "kind": "fotocopia"
+  },
+  {
+    "id": "2026-11-10-c11-mousse-au-chocolat",
+    "title": "La recette de la mousse au chocolat",
+    "href": "https://seafile.biblivre.app/d/bb95955a0c7e4378a712/files/?p=%2F2026-11-10-c11-mousse-au-chocolat.mp4",
+    "date": "2026-11-10",
+    "kind": "otro",
+    "note": "Vídeo de la comprensión oral."
+  },
+  {
     "id": "2026-11-06-verbes-de-cuisine",
     "title": "Les verbes de cuisine",
     "href": "https://www.youtube.com/watch?v=ZGEK8Dc6Vxc",

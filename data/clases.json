@@ -175,5 +175,39 @@
       "2026-11-05-c10-les-aliments-a1",
       "2026-11-05-c10-les-aliments-a2"
     ]
+  },
+  {
+    "number": 11,
+    "date": "2026-11-10",
+    "did": [
+      "Compréhension orale « La recette de la mousse au chocolat »",
+      "Articles partitifs et adverbes de quantité",
+      "Les aliments (A2)"
+    ],
+    "files": [
+      "2026-11-10-c11-mousse-au-chocolat",
+      "2026-11-10-c11-comprehension-mousse-au-chocolat",
+      "2026-11-10-c11-articles-partitifs",
+      "2026-11-05-c10-les-aliments-a2"
+    ]
+  },
+  {
+    "number": 12,
+    "date": "2026-11-12",
+    "did": [
+      "Compréhension orale « La recette de la mousse au chocolat »",
+      "Articles partitifs et adverbes de quantité",
+      "Les aliments (A2)"
+    ],
+    "homework": [
+      "Escribir una receta de cocina en francés con « Ma recette de cuisine ». Usar las expresiones de cantidad y el vocabulario de los alimentos."
+    ],
+    "files": [
+      "2026-11-10-c11-mousse-au-chocolat",
+      "2026-11-10-c11-comprehension-mousse-au-chocolat",
+      "2026-11-10-c11-articles-partitifs",
+      "2026-11-05-c10-les-aliments-a2",
+      "2026-11-12-c12-ma-recette-de-cuisine"
+    ]
   }
 ]
