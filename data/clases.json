@@ -209,5 +209,35 @@
       "2026-11-05-c10-les-aliments-a2",
       "2026-11-12-c12-ma-recette-de-cuisine"
     ]
+  },
+  {
+    "number": 13,
+    "date": "2026-11-17",
+    "did": [
+      "Grammaire « L'impératif »",
+      "Compréhension écrite « Les habitudes à table en France et dans les soirées entre amis »",
+      "Pain au chocolat ou chocolatine"
+    ],
+    "files": [
+      "2026-11-17-c13-imperatif",
+      "2026-11-17-c13-habitudes-a-table",
+      "2026-11-17-c13-pain-au-chocolat-ou-chocolatine",
+      "2026-11-17-c13-pain-au-chocolat-photo"
+    ]
+  },
+  {
+    "number": 14,
+    "date": "2026-11-19",
+    "did": [
+      "Grammaire « L'impératif »",
+      "Compréhension écrite « Les habitudes à table en France et dans les soirées entre amis »",
+      "Pain au chocolat ou chocolatine"
+    ],
+    "files": [
+      "2026-11-17-c13-imperatif",
+      "2026-11-17-c13-habitudes-a-table",
+      "2026-11-17-c13-pain-au-chocolat-ou-chocolatine",
+      "2026-11-17-c13-pain-au-chocolat-photo"
+    ]
   }
 ]
