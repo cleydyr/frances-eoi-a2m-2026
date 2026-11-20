@@ -1,5 +1,18 @@
 [
   {
+    "date": "2026-11-20",
+    "covers": ["2026-11-17", "2026-11-19"],
+    "files": [
+      "2026-11-20-histoire-chocolatine",
+      "2026-11-20-chocolatines-paris",
+      "2026-11-20-vie-a-bordeaux",
+      "2026-11-20-salade-a-table",
+      "2026-11-20-imperatif-topo",
+      "2026-11-20-ordonnez-la-recette",
+      "2026-11-20-imperatif-present"
+    ]
+  },
+  {
     "date": "2026-11-14",
     "covers": ["2026-11-10", "2026-11-12"],
     "files": ["2026-11-14-les-cornichons"]
