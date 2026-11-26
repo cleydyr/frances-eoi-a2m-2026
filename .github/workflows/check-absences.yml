@@ -6,7 +6,9 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: write
   contents: write
+  pull-requests: write
 
 concurrency:
   group: check-absences
@@ -27,14 +29,67 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      # master only accepts a pull request whose head has passed the validate check.
+      # A push or pull request opened with GITHUB_TOKEN does not start that workflow, so dispatch it.
       - name: Record notified absences
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
+          set -euo pipefail
           git add data/absences.json
           if git diff --cached --quiet; then
             echo "No new absences to record"
             exit 0
           fi
+
+          npm run validate
+
+          branch=bot/absences
+          git checkout -B "$branch"
+          git add data/absences.json
           git -c user.name="github-actions[bot]" \
             -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
             commit -m "Record newly notified absences"
-          git push
+          git push --force origin "HEAD:$branch"
+
+          pr=$(gh pr list --head "$branch" --base master --state open --json number --jq '.[0].number // empty')
+          if [ -z "$pr" ]; then
+            url=$(gh pr create \
+              --base master \
+              --head "$branch" \
+              --title "Record newly notified absences" \
+              --body "The absence check found new rows and updated data/absences.json.")
+            pr=${url##*/}
+          else
+            url=$(gh pr view "$pr" --json url --jq .url)
+          fi
+          echo "Pull request: $url"
+
+          sha=$(git rev-parse HEAD)
+          gh workflow run validate-data.yml --ref "$branch"
+          run_id=
+          for _ in $(seq 1 60); do
+            run_id=$(gh run list \
+              --workflow validate-data.yml \
+              --branch "$branch" \
+              --json databaseId,headSha \
+              --jq "map(select(.headSha == \"$sha\")) | .[0].databaseId // empty")
+            if [ -n "$run_id" ]; then
+              break
+            fi
+            sleep 5
+          done
+          if [ -z "$run_id" ]; then
+            echo "Validate workflow did not start for $sha"
+            exit 1
+          fi
+          gh run watch "$run_id" --exit-status
+
+          for _ in $(seq 1 20); do
+            if gh pr merge "$pr" --squash --delete-branch; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Could not merge $url"
+          exit 1
