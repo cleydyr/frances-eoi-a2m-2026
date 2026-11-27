@@ -248,19 +248,6 @@
       "Grammaire progressive du français",
       "Tendances A2 — Le dîner de Greg"
     ],
-    "files": [
-      "2026-11-24-c15-diner-de-greg",
-      "2026-11-24-c15-grammaire-progressive"
-    ]
-  },
-  {
-    "number": 16,
-    "date": "2026-11-26",
-    "did": [
-      "Le pronom EN (pages 26 et 27, activités 1 et 2)",
-      "Grammaire progressive du français",
-      "Tendances A2 — Le dîner de Greg"
-    ],
     "homework": [
       "Hacer « Le pronom EN — Exercices d'entraînement ».",
       "Escribir la respuesta a 4 preguntas de la ruleta « Pronom \"en\" »."
@@ -268,8 +255,8 @@
     "files": [
       "2026-11-24-c15-diner-de-greg",
       "2026-11-24-c15-grammaire-progressive",
-      "2026-11-26-c16-pronom-en-exercices",
-      "2026-11-26-c16-pronom-en"
+      "2026-11-24-c15-pronom-en-exercices",
+      "2026-11-24-c15-pronom-en"
     ]
   }
 ]
